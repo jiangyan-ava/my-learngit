@@ -1,0 +1,66 @@
+﻿package com.javatest;
+
+/**
+ * Created by 14-5545 on 2017/7/22.
+ */
+import java.util.Scanner;
+class Zi
+{
+    void function()
+    {
+        int num,i;//num用来存储用户输入的数字；i用作记录猜的次数
+        final int A=567;//A表示猜数游戏的正确结果
+        System.out.println("开始游戏？(yes or no)");//开始提示（如果用户回答no 程序自动结束）
+        Scanner sc =new Scanner(System.in);
+        String start=sc.nextLine();
+        if(start.equals("yes"))
+        {
+
+            for (i = 1; ; i++)
+            {
+
+                System.out.println("请输入你的数字(1~1000)");
+                Scanner input = new Scanner(System.in);//用户键盘输入用户猜的数，用num存储该值
+                num = input.nextInt();
+                while(num<1|num>1000)//如果用户一直输入错误的数字，程序会一直提示重新输入，直到输入的数字在提示的范围内
+                {
+                    System.out.println("输入的数字超过范围，请重新输入");
+                    System.out.println("请输入你的数字(1~1000)");
+                    Scanner input1 = new Scanner(System.in);
+                    num = input1.nextInt();
+                }
+                if (num != A)
+                {
+                    if(num>A) System.out.print("猜大了 ");//如果猜错；判断用户输入的数字大还是小，并提问是否继续或者退出游戏
+                    else System.out.print("猜小了 ");
+                    System.out.println("再试一次？(yes)或者退出游戏（no）？");
+                    Scanner zai = new Scanner(System.in);
+                    String line = zai.nextLine();
+                    if (line.equals("yes")) continue;//继续游戏；猜的次数自增
+                    else   break;//用户选择退出游戏，则退出循环
+
+                }
+                else {System.out.println("恭喜你猜对了");break;}//用户猜中数字，退出循环
+            }
+            System.out.println("一共猜了" + i + "次");//无论猜对与否，都输出猜的次数
+            System.out.println("再重新玩一次吗？(yes or no)");//再来一次选项
+            Scanner response = new Scanner(System.in);//用户输入是否再玩一次，line接收用户输入的结果
+            String line = response.nextLine();
+            if (line.equals("yes")) function();
+            else return;
+        }
+        else return;
+    }
+
+
+}
+public class GuessGame
+{
+
+    public static void main(String[] args)
+    {
+
+    Zi z=new Zi();//创建类Zi的对象，进入该类进行游戏
+    z.function();
+    }
+}

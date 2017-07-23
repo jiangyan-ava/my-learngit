@@ -1,0 +1,533 @@
+/*
+多态：可以理解为事物存在的多种体现形态
+（“继承让类与类之间产生了关系，这样才有了多态的特性”）
+人（男人 女人）
+动物（猫 狗）
+猫 x=new 猫();
+动物 x=new 猫();  猫的实体具有猫的类型，也具备动物类型
+JAVA中着重讲对象的多态性（实际上函数的重载与覆盖也体现其多态性）
+多态的：
+1.表现形式
+  父类的引用指向了自己的子类对象
+  父类的引用也可以接收自己的子类对象
+2.前提
+  必须是类与类之间有关系，要么继承；要么实现
+  通常还有一个前提：存在覆盖
+3.好处
+  多态的出现大大提高了程序的扩展性
+4.弊端
+  提高了扩展性，但是只能使用父类的引用访问父类的成员，不能访问子类成员
+ （
+  比如在这个程序中，假设父类Animal不是抽象类：  Animal c父类引用；访问子类成员 c.gongdi();就不允许，系统会报错显示找不到该符号；
+  因为在Java中，父类是先建立的，这个时候子类还没有建立，子类成员也不存在，自然不存在访问子类成员
+  ）
+5.应用
+6.多态的出现代码中的特点（多态的使用注意事项）
+*/
+/*
+需求：动物
+猫 狗 
+*/
+abstract class Animal
+{
+	abstract void eat();
+	
+}
+class Cat extends Animal 
+{
+	public void eat()
+	{
+		System.out.println("fish");
+	}
+	public void catchmouse()
+	{
+		System.out.println("catch mouse");
+	}
+}
+class Dog extends Animal
+{
+	public void eat()
+	{
+		System.out.println("gutou");
+	}
+	public void kanjia()
+	{
+		System.out.println("kanjiahhh");
+	}
+}
+class Pig extends Animal
+{
+	public void eat()
+	{
+		System.out.println("siliao");
+	}
+	public void gongDi()
+	{
+		System.out.println("gong_gong");
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+class DuoTaiDemo
+{
+	public static void main(String[] args)
+	{
+		//Cat c=new Cat();
+		//c.eat();
+		//Dog d=new Dog();
+		//d.eat();
+		/*Cat c1=new Cat();
+		function(c);
+		Dog d1=new Dog();
+		function(d);
+		*/
+		Animal c=new Cat();//一个对象具备多种形态造成的：是Cat类型又是Animal类型（如果反过来写，new Animal是不允许的：Animal是抽象的，无法实例化，也就无法分配空间来创建新对象）
+		c.eat();
+		
+		function(new Cat());//这一句传到下面的function函数，就相当于Animal a= new Cat();
+	}
+	public static void function(Animal a)
+	{
+		a.eat();//如果在这个函数内加一句看家行为，程序会报错：因为Animal类里面并没有这个函数
+	}
+	/*public static void function(Cat c)相当于Cat =new Cat；可以改成function(Animal)因为父类的引用也可以接收自己的子类对象
+	{
+		c.eat();
+	}
+	*/
+}
+
+/*
+5.应用
+多态转型：
+*/
+abstract class Animal
+{
+	abstract void eat();
+	
+}
+class Cat extends Animal 
+{
+	public void eat()
+	{
+		System.out.println("fish");
+	}
+	public void catchMouse()
+	{
+		System.out.println("catch mouse");
+	}
+}
+class Dog extends Animal
+{
+	public void eat()
+	{
+		System.out.println("gutou");
+	}
+	public void kanJia()
+	{
+		System.out.println("kanjiahhh");
+	}
+}
+class Pig extends Animal
+{
+	public void eat()
+	{
+		System.out.println("siliao");
+	}
+	public void gongDi()
+	{
+		System.out.println("gong_gong");
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+class DuoTaiDemo2
+{
+	public static void main(String[] args)
+	{
+		Animal a=new Cat();//类型提升:(byte b=2;int x=b; b会被提升类型)这里是类的提升，又称为向上转型
+		a.eat();
+		
+		//如果想要调用猫的特有方法时：如何操作？（父类的引用访问父类的成员，不能访问子类成员）
+		Cat c=(Cat)a;//强转；强制将父类的引用转成子类类型  向下转型
+		c.catchMouse();
+		/*
+		假设Animal可以新建对象：但是不能Animal a=new Animal(); Cat c=(Cat)a;错误
+		（父类先出现，把父类强转为子类，而父类不具备子类特有的方法）
+		强制将父类的引用转成子类类型是强转；向下转型（而父类的引用指向自己的子类对象；也可以接收自己的子类对象）
+		 但是不能将父类对象转成子类类型
+		 也就是说，能转的是父类引用指向了自己子类对象时，该引用可以被强转或者提升
+		 
+		 多态自始至终都是子类对象在做变化
+		 
+		 “只能使用父类的引用访问父类的成员，不能访问子类成员”也即是说，
+		 子类对象可以提升/向上转型为父类型
+		 父类引用可以指向子类对象，可以接收子类对象，还可以被强转成子类类型，但是父类引用只能访问父类的成员，不能访问子类成员（因为父类先存在，如果父类没有相应成员，报错）（但如果是相同函数的覆盖，就执行子类的函数）
+		 父类对象也不能转为子类类型
+		*/
+		
+		//function(new Cat());这一句可以调用下面的function函数运行，但是如果new Dog：编译不出错，但是运行在把猫强转成狗的时候，会报错
+		//所以在function里面加一个判断语句；又因为这个时候，c已经是引用数据类型,判断所属类型：if(a instanceof Cat)
+	}
+	public static void function(Animal a)
+	{
+		a.eat();
+		if(a instanceof Cat)
+		{
+		Cat c=(Cat)a;
+		c.catchMouse();
+		}
+		else if(a instanceof Dog)
+		{
+			Dog d=(Dog)a;
+			d.kanJia();
+		}
+		else if(a instanceof Pig)
+		{
+			Pig d=(Pig)a;
+			d.gongDi();
+		}
+	}
+}
+
+/*
+需求：
+基础班学生：
+ 学习 睡觉
+ 高级班学生
+  学习 睡觉
+ 可以将这两类事物抽取
+*/
+abstract class Student
+{
+	public abstract void study();
+	public void sleep()
+	{
+		System.out.println("sleep");
+	}
+}
+
+
+class DoStudent//工具类
+{
+	public void doSome(Student stu)
+	{
+		stu.study();
+		stu.sleep();
+	}
+}
+
+
+
+class BaseStudent extends Student
+{
+	public void study()
+	{
+		System.out.println("base_study");
+	}
+	public void sleep()
+	{
+		System.out.println("sleephhh");
+	}
+}
+
+class AdvanceStudent extends Student
+{
+	public void study()
+	{
+		System.out.println("adv_study");
+	}
+}
+
+
+
+class DuoTaiDemo3
+{
+	public static void main(String[] args)
+	{
+		DoStudent ds=new DoStudent();
+		ds.doSome(new BaseStudent());
+		ds.doSome(new AdvanceStudent());
+		//扩展性：如果再加学生的种类，再在下面加一句ds.doSome();即可  
+		
+		/*
+		BaseStudent bs=new BaseStudent();
+		bs.study();
+		bs.sleep();
+		
+		AdvanceStudent as=new AdvanceStudent();
+		as.study();
+		as.sleep();
+		*/
+		
+	}
+	
+}
+/*
+多态中子父类函数的调用
+
+*/
+class Fu
+{
+	int num=5;
+	void method1()
+	{
+		System.out.println("fu method_1");
+	}
+	void method2()
+	{
+		System.out.println("fu method_2");
+	}
+	static void method4()
+	{
+		System.out.println("fu method_4");
+	}
+}
+
+class Zi extends Fu 
+{
+	int num=8;
+	void method1()
+	{
+		System.out.println("zi method_1");
+	}
+	void method3()
+	{
+		System.out.println("zi method_3");
+	}
+	static void method4()
+	{
+		System.out.println("zi method_4");
+	}
+}
+
+
+class DuoTaiDemo4
+{
+	public static void main(String[] args)
+	{
+		/*
+		Fu f=new Zi();
+		System.out.println(f.num);//输出5
+		
+		Zi z=new Zi();
+		System.out.println(z.num);//输出8
+		在多态中，非静态成员变量的特点：
+		无论编译和运行，都参考引用型变量所属的类
+		（静态成员变量：看引用型变量所属的类）
+		*/
+		
+		/*
+		Fu f=new Zi();
+		f.method4();//输出fu method_4
+		
+		Zi z=new Zi();
+		z.method4();//输出zi method_4
+		在多态中，静态成员函数的特点：无论是编译还是运行，都参考引用型变量所属的类
+		因为静态函数是在对象建立之前就存在的
+		*/
+		//f.method1();函数覆盖 输出zi method_1
+		//f.method2();
+		//f.method3();编译失败
+		/*
+		在多态（父类引用指向子类）中，成员函数的特点：
+		在编译时期，参阅引用型变量所属的类中是否有调用的方法，如果有，编译通过没有：编译失败
+		在运行时期，参阅对象所属的类中，是否有调用的方法
+		*/
+		
+		
+		/*
+		Zi z=new Zi();
+		z.method1();
+		z.method2();
+		z.method3();
+		*/
+	}
+}
+
+/*
+需求：
+电脑运行实例
+电脑运行基于主板
+*/
+
+/*class MainBoard
+{
+	public void run()
+	{
+		System.out.println("MainBoard run");
+	}
+	public void useNetCard(NetCard c)
+	{
+		c.open();
+		c.close();
+	}
+}
+class NetCard
+{
+	public void open()
+	{
+		System.out.println("netcard open");
+	}
+	public void close()
+	{
+		System.out.println("netcard close");
+	}
+}
+*/
+
+interface PCI//
+{
+	public void open();
+	public void close();
+}
+class Mainboard
+{
+	public void run()
+	{
+		System.out.println("MainBoard run");
+	}
+	public void usePCI(PCI p)//PCI p=new NetCard();接口型引用指向自己的子类对象
+	{
+		if(p!=null)
+		{
+		p.open();
+		p.close();
+		}
+	}
+}
+class NetCard implements PCI 
+{
+	public void open()
+	{
+		System.out.println("netcard open");
+	}
+	public void close()
+	{
+		System.out.println("netcard close");
+	}
+	
+}
+
+class SoundCard implements PCI 
+{
+	public void open()
+	{
+		System.out.println("soundcard open");
+	}
+	public void close()
+	{
+		System.out.println("soundcard close");
+	}
+	
+}
+class DuoTaiDemo5
+{
+	public static void main()
+	{
+		MainBoard mb=new MainBoard();
+		mb.run();
+		mb.usePCI(null);
+		mb.usePCI(new NetCard());
+		mb.usePCI(new SoundCard());
+		//MainBoard mb=new MainBoard();
+		//mb.run(); 
+		//mb.useNetCard(new NetCard());
+	}
+}
+
+/*
+需求：
+数据库的操作
+数据是：用户信息
+1.连接数据库
+2.操作数据库
+ crate read update delete
+3.关闭数据库连接
+*/
+interface UserInfoDao
+{
+	public void (User user);
+	public void (User user);
+}
+
+class UserInfoHibernate implements UserInfoDao
+{
+	public void add(User user)
+	{
+		1.Hibernate连接数据库
+		2.使用sql添加数据
+		3.关闭连接
+	}
+	public void delete(User user)
+	{
+		1。Hibernate连接数据库
+		2.使用sql删除数据
+		3.关闭连接
+	}
+}
+
+
+class UserInfoJDBC implements UserInfoDao
+{
+	public void add(User user)
+	{
+		1.JDBC连接数据库
+		2.使用sql添加数据
+		3.关闭连接
+	}
+	public void delete(User user)
+	{
+		1.JDBC连接数据库
+		2.使用sql删除数据
+		3.关闭连接
+	}
+}
+
+class DBoperate
+{
+	public static void main(String[] args)
+	{
+		//UserInfoJDBC ui=new UserInfoJDBC();
+		//UserInfoHibernate ui=new UserInfoHibernate();//这个时候更换数据库的代码，主程序的代码跟着就要改变。二者耦合关系紧密：重新设计代码
+		//ui.add(user);                                //又因为二者的函数名称都一样，唯一不同的就是里面函数体的内容：可以用接口改善（以接口为媒介，两边符合接口的规则进行连接）
+		//ui.delete(user);
+		UserInfoDao ui =new UserInfoHibernate;//改成对应的连接方式的类名就可以使用其他的连接方式
+		ui.add(user);                         //接口型引用指向自己的子类对象
+		ui.delete(user);
+		
+	}
+}
+
+class UserInfoJDBC
+{
+	public void add(User user)
+	{
+		1.JDBC连接数据库
+		2.使用sql添加数据
+		3.关闭连接
+	}
+	public void delete(User user)
+	{
+		1.JDBC连接数据库
+		2.使用sql删除数据
+		3.关闭连接
+	}
+}
+
+//如果要更换连接方式：
+class UserInfoHibernate
+{
+	public void add(User user)
+	{
+		1.Hibernate连接数据库
+		2.使用sql添加数据
+		3.关闭连接
+	}
+	public void delete(User user)
+	{
+		1。Hibernate连接数据库
+		2.使用sql删除数据
+		3.关闭连接
+	}
+}
