@@ -1,0 +1,34 @@
+package com.javatest;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+public class TestDemo1 {
+
+    public static void main(String[] args)
+    {
+        PrintOut pt=new PrintOut();
+        pt.execute(pt);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);//创建一个线程池的模型
+        //添加线程：
+        for (int x = 0; x < 6; x++) {
+
+            executorService.submit(pt);
+        }
+        executorService.shutdown();//关闭线程池
+
+    }
+}
+ class PrintOut implements Runnable, java.util.concurrent.Executor
+ {
+     private int x;
+    public void run() {
+         for(x=0;x<10;x++){
+            System.out.println(Thread.currentThread().getName() + "、x=" +x);
+        }
+    }
+     public void execute(Runnable r)//Runnable的子类就叫线程对象
+     {
+         new Thread(r).start();
+     }
+
+}
+
