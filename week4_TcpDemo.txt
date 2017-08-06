@@ -1,0 +1,42 @@
+
+import java.io.*;
+import java.net.*;
+/*客户端*/
+class TcpClient
+{
+	public static void main(String[] args)throws Exception
+	{
+		Socket s=new Socket("192.168.1.254",10003);//创建客户端的Socket服务，指定目的主机和端口
+		
+		OutputStream out=s.getOutputStream();//为了发送数据，应该获取Socket流中的输出流
+		
+		out.write("tcp mmp".getBytes());
+		s.close();
+		
+	}
+}
+
+/*服务端
+定义端点接收数据并打印在控制台上
+*/
+class TcpServer
+{
+	public static void main(String[] args)throws Exception
+	{
+		ServerSocket ss=new ServerSocket(10003);//建立服务端的Socket服务，并监听一个端口
+		
+		Socket s=ss.accept();//通过accept方法获取连接过来的客户端对象
+		
+		String ip=s.getInetAddress().getHostAddress();
+		System.out.println(ip+".....connected");
+		
+		InputStream in=s.getInputStream();//获取客户端发送过来的数据，那么要使用客户端对象的读取流方法来读取数据
+		
+		byte[] buf=new byte[1024];//创建缓冲区
+		int len=in.read(buf);
+		System.out.println(new String(buf,0,len));
+		
+		s.close();//关闭客户端
+		ss.close();//关闭服务端（可选）
+	}
+}

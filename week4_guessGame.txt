@@ -1,0 +1,69 @@
+import java.util.Scanner;
+
+public class Guess
+{
+
+    public static void main(String[] args)
+    {
+        System.out.println("开始游戏？(yes or no)");
+        if(  Print.lineprint().equals("yes"))
+        {
+            Game game=new Game();
+            game.printin();
+            System.out.println("再来一局？(yes or no)");
+            if(Print.lineprint().equals("yes") )
+            {
+                game.printin();
+            }
+        }
+    }
+}
+
+class Game
+{
+   private  int a;//a用来存储每次进行游戏程序产生的随机数
+   private int count=0;//count用来存储每次猜的次数
+    public void printin() {
+        System.out.println("请输入你的数字(1~100)");
+       a = (int) (Math.random() * 100);//生成1-100的随机int数字
+        System.out.println("正确数字是" + a);
+        panduan(Print.intprint(),a);
+    }
+
+    public void panduan(int x,int a)
+    {
+            if(x<a) System.out.println("小了");
+            if(x>a) System.out.println("大了");
+
+            if(x==a) System.out.println("猜对了");
+            count++;
+            choice();
+    }
+    public void choice()
+    {
+        System.out.println("退出？(yes or no)");
+        String s=Print.lineprint();
+
+        if(s.equals("no") )
+        {
+            System.out.println("请输入你的数字(1~100)");
+            panduan(Print.intprint(),a);
+        }
+        if(s.equals("yes") )
+        System.out.println("一共猜了"+count+"次");
+    }
+}
+class Print//用来传入键盘录入的工具类
+{
+
+    public static String lineprint()
+    {
+        Scanner sc =new Scanner(System.in);
+        return sc.nextLine();
+    }
+    public static int intprint()
+    {
+        Scanner input = new Scanner(System.in);
+        return input.nextInt();
+    }
+}
